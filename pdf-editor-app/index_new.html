@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Editor Pro - Powered by pdf-lib</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-file-pdf"></i>
+                    <h1>PDF Editor Pro</h1>
+                </div>
+                <nav class="nav-tabs">
+                    <button class="nav-tab active" data-tab="create">
+                        <i class="fas fa-plus"></i>
+                        Create PDF
+                    </button>
+                    <button class="nav-tab" data-tab="modify">
+                        <i class="fas fa-edit"></i>
+                        Modify PDF
+                    </button>
+                    <button class="nav-tab" data-tab="forms">
+                        <i class="fas fa-wpforms"></i>
+                        Forms
+                    </button>
+                    <button class="nav-tab" data-tab="tools">
+                        <i class="fas fa-tools"></i>
+                        Tools
+                    </button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Create PDF Tab -->
+            <div class="tab-content active" id="create-tab">
+                <div class="content-grid">
+                    <div class="control-panel">
+                        <div class="panel-section">
+                            <h3><i class="fas fa-file-alt"></i> Document Properties</h3>
+                            <div class="form-group">
+                                <label>Title:</label>
+                                <input type="text" id="doc-title" placeholder="Document Title" />
+                            </div>
+                            <div class="form-group">
+                                <label>Author:</label>
+                                <input type="text" id="doc-author" placeholder="Author Name" />
+                            </div>
+                            <div class="form-group">
+                                <label>Subject:</label>
+                                <input type="text" id="doc-subject" placeholder="Document Subject" />
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Width:</label>
+                                    <input type="number" id="page-width" value="595" min="100" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Height:</label>
+                                    <input type="number" id="page-height" value="842" min="100" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel-section">
+                            <h3><i class="fas fa-font"></i> Text</h3>
+                            <div class="form-group">
+                                <label>Text Content:</label>
+                                <textarea id="text-content" placeholder="Enter your text here..." rows="3"></textarea>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Font:</label>
+                                    <select id="text-font">
+                                        <option value="Helvetica">Helvetica</option>
+                                        <option value="TimesRoman">Times Roman</option>
+                                        <option value="Courier">Courier</option>
+                                        <option value="HelveticaBold">Helvetica Bold</option>
+                                        <option value="TimesRomanBold">Times Bold</option>
+                                        <option value="CourierBold">Courier Bold</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Size:</label>
+                                    <input type="number" id="text-size" value="12" min="8" max="72" />
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Color:</label>
+                                    <input type="color" id="text-color" value="#000000" />
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Position X:</label>
+                                    <input type="number" id="text-x" value="50" min="0" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Position Y:</label>
+                                    <input type="number" id="text-y" value="750" min="0" />
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary" id="add-text">
+                                <i class="fas fa-plus"></i> Add Text
+                            </button>
+                        </div>
+
+                        <div class="panel-section">
+                            <h3><i class="fas fa-image"></i> Images</h3>
+                            <div class="form-group">
+                                <label>Upload Image:</label>
+                                <input type="file" id="image-upload" accept="image/png,image/jpeg" />
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Position X:</label>
+                                    <input type="number" id="image-x" value="50" min="0" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Position Y:</label>
+                                    <input type="number" id="image-y" value="600" min="0" />
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Width:</label>
+                                    <input type="number" id="image-width" value="200" min="10" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Height:</label>
+                                    <input type="number" id="image-height" value="200" min="10" />
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary" id="add-image" disabled>
+                                <i class="fas fa-plus"></i> Add Image
+                            </button>
+                        </div>
+
+                        <div class="panel-section">
+                            <h3><i class="fas fa-shapes"></i> Shapes</h3>
+                            <div class="form-group">
+                                <label>Shape Type:</label>
+                                <select id="shape-type">
+                                    <option value="rectangle">Rectangle</option>
+                                    <option value="circle">Circle</option>
+                                    <option value="line">Line</option>
+                                </select>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Position X:</label>
+                                    <input type="number" id="shape-x" value="100" min="0" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Position Y:</label>
+                                    <input type="number" id="shape-y" value="400" min="0" />
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Width:</label>
+                                    <input type="number" id="shape-width" value="100" min="1" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Height:</label>
+                                    <input type="number" id="shape-height" value="50" min="1" />
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Fill Color:</label>
+                                    <input type="color" id="shape-fill" value="#3498db" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Border Color:</label>
+                                    <input type="color" id="shape-border" value="#2c3e50" />
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary" id="add-shape">
+                                <i class="fas fa-plus"></i> Add Shape
+                            </button>
+                        </div>
+
+                        <div class="panel-section">
+                            <h3><i class="fas fa-magic"></i> Actions</h3>
+                            <button class="btn btn-primary" id="create-pdf">
+                                <i class="fas fa-file-pdf"></i> Create PDF
+                            </button>
+                            <button class="btn btn-secondary" id="clear-all">
+                                <i class="fas fa-trash"></i> Clear All
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="preview-panel">
+                        <div class="preview-header">
+                            <h3><i class="fas fa-eye"></i> Preview</h3>
+                            <div class="preview-actions">
+                                <button class="btn btn-sm" id="download-pdf" disabled>
+                                    <i class="fas fa-download"></i> Download
+                                </button>
+                            </div>
+                        </div>
+                        <div class="preview-content">
+                            <div id="preview-container">
+                                <div class="preview-placeholder">
+                                    <i class="fas fa-file-pdf"></i>
+                                    <p>Your PDF preview will appear here</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modify PDF Tab -->
+            <div class="tab-content" id="modify-tab">
+                <div class="content-grid">
+                    <div class="control-panel">
+                        <div class="panel-section">
+                            <h3><i class="fas fa-upload"></i> Upload PDF</h3>
+                            <div class="form-group">
+                                <label>Select PDF file:</label>
+                                <input type="file" id="pdf-upload" accept=".pdf" />
+                            </div>
+                            <button class="btn btn-primary" id="load-pdf" disabled>
+                                <i class="fas fa-upload"></i> Load PDF
+                            </button>
+                        </div>
+
+                        <div class="panel-section" id="modify-controls" style="display: none;">
+                            <h3><i class="fas fa-edit"></i> Modify Content</h3>
+                            <div class="form-group">
+                                <label>Add Text:</label>
+                                <textarea id="modify-text" placeholder="Enter text to add..." rows="3"></textarea>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Page:</label>
+                                    <input type="number" id="modify-page" value="1" min="1" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Font Size:</label>
+                                    <input type="number" id="modify-font-size" value="12" min="8" max="72" />
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Position X:</label>
+                                    <input type="number" id="modify-x" value="50" min="0" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Position Y:</label>
+                                    <input type="number" id="modify-y" value="750" min="0" />
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary" id="add-modify-text">
+                                <i class="fas fa-plus"></i> Add Text to PDF
+                            </button>
+                        </div>
+
+                        <div class="panel-section" id="page-controls" style="display: none;">
+                            <h3><i class="fas fa-file-alt"></i> Page Operations</h3>
+                            <button class="btn btn-secondary" id="add-page">
+                                <i class="fas fa-plus"></i> Add Page
+                            </button>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Remove Page:</label>
+                                    <input type="number" id="remove-page-num" value="1" min="1" />
+                                </div>
+                                <button class="btn btn-warning" id="remove-page">
+                                    <i class="fas fa-trash"></i> Remove
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="panel-section" id="modify-actions" style="display: none;">
+                            <h3><i class="fas fa-save"></i> Save Changes</h3>
+                            <button class="btn btn-primary" id="save-modified-pdf">
+                                <i class="fas fa-save"></i> Save Modified PDF
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="preview-panel">
+                        <div class="preview-header">
+                            <h3><i class="fas fa-eye"></i> Interactive PDF Editor</h3>
+                            <div class="preview-actions">
+                                <button class="btn btn-sm" id="editor-mode-toggle">
+                                    <i class="fas fa-edit"></i> Edit Mode
+                                </button>
+                                <button class="btn btn-sm" id="download-modified-pdf" disabled>
+                                    <i class="fas fa-download"></i> Download
+                                </button>
+                            </div>
+                        </div>
+                        <div class="preview-content">
+                            <div id="modify-preview-container">
+                                <div class="preview-placeholder">
+                                    <i class="fas fa-file-pdf"></i>
+                                    <p>Upload a PDF to start editing</p>
+                                </div>
+                            </div>
+                            <div id="interactive-editor" class="interactive-editor" style="display: none;">
+                                <div class="editor-toolbar">
+                                    <div class="toolbar-group">
+                                        <button class="tool-btn active" id="select-tool" data-tool="select" title="Select">
+                                            <i class="fas fa-mouse-pointer"></i>
+                                        </button>
+                                        <button class="tool-btn" id="text-tool" data-tool="text" title="Add Text">
+                                            <i class="fas fa-font"></i>
+                                        </button>
+                                        <button class="tool-btn" id="image-tool" data-tool="image" title="Add Image">
+                                            <i class="fas fa-image"></i>
+                                        </button>
+                                        <button class="tool-btn" id="shape-tool" data-tool="shape" title="Add Shape">
+                                            <i class="fas fa-shapes"></i>
+                                        </button>
+                                    </div>
+                                    <div class="toolbar-group">
+                                        <button class="tool-btn" id="delete-element" title="Delete Selected" disabled>
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                        <button class="tool-btn" id="copy-element" title="Copy Selected" disabled>
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                        <button class="tool-btn" id="paste-element" title="Paste" disabled>
+                                            <i class="fas fa-paste"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="editor-canvas-container">
+                                    <canvas id="pdf-canvas" class="pdf-canvas"></canvas>
+                                    <div id="element-handles" class="element-handles"></div>
+                                </div>
+                                <div class="properties-panel" id="properties-panel" style="display: none;">
+                                    <h4>Element Properties</h4>
+                                    <div id="text-properties" class="property-group" style="display: none;">
+                                        <label>Text:</label>
+                                        <textarea id="prop-text-content" rows="2"></textarea>
+                                        <label>Font Size:</label>
+                                        <input type="number" id="prop-font-size" min="8" max="72" value="12">
+                                        <label>Color:</label>
+                                        <input type="color" id="prop-text-color" value="#000000">
+                                    </div>
+                                    <div id="image-properties" class="property-group" style="display: none;">
+                                        <label>Width:</label>
+                                        <input type="number" id="prop-image-width" min="10" value="100">
+                                        <label>Height:</label>
+                                        <input type="number" id="prop-image-height" min="10" value="100">
+                                    </div>
+                                    <div id="shape-properties" class="property-group" style="display: none;">
+                                        <label>Width:</label>
+                                        <input type="number" id="prop-shape-width" min="1" value="100">
+                                        <label>Height:</label>
+                                        <input type="number" id="prop-shape-height" min="1" value="50">
+                                        <label>Fill Color:</label>
+                                        <input type="color" id="prop-shape-fill" value="#3498db">
+                                        <label>Border Color:</label>
+                                        <input type="color" id="prop-shape-border" value="#2c3e50">
+                                    </div>
+                                    <div class="property-group">
+                                        <label>X Position:</label>
+                                        <input type="number" id="prop-x" value="0">
+                                        <label>Y Position:</label>
+                                        <input type="number" id="prop-y" value="0">
+                                    </div>
+                                    <button class="btn btn-sm btn-primary" id="apply-properties">Apply Changes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Forms Tab -->
+            <div class="tab-content" id="forms-tab">
+                <div class="content-grid">
+                    <div class="control-panel">
+                        <div class="panel-section">
+                            <h3><i class="fas fa-wpforms"></i> Form Properties</h3>
+                            <div class="form-group">
+                                <label>Form Title:</label>
+                                <input type="text" id="form-title" placeholder="Form Title" />
+                            </div>
+                        </div>
+
+                        <div class="panel-section">
+                            <h3><i class="fas fa-plus"></i> Add Form Elements</h3>
+                            
+                            <div class="form-element-type">
+                                <h4><i class="fas fa-keyboard"></i> Text Field</h4>
+                                <div class="form-group">
+                                    <label>Field Name:</label>
+                                    <input type="text" id="text-field-name" placeholder="e.g., firstName" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Label:</label>
+                                    <input type="text" id="text-field-label" placeholder="e.g., First Name" />
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>X:</label>
+                                        <input type="number" id="text-field-x" value="50" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Y:</label>
+                                        <input type="number" id="text-field-y" value="750" />
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Width:</label>
+                                        <input type="number" id="text-field-width" value="200" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Height:</label>
+                                        <input type="number" id="text-field-height" value="20" />
+                                    </div>
+                                </div>
+                                <button class="btn btn-secondary" id="add-text-field">
+                                    <i class="fas fa-plus"></i> Add Text Field
+                                </button>
+                            </div>
+
+                            <div class="form-element-type">
+                                <h4><i class="fas fa-check-square"></i> Checkbox</h4>
+                                <div class="form-group">
+                                    <label>Field Name:</label>
+                                    <input type="text" id="checkbox-name" placeholder="e.g., newsletter" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Label:</label>
+                                    <input type="text" id="checkbox-label" placeholder="e.g., Subscribe to newsletter" />
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>X:</label>
+                                        <input type="number" id="checkbox-x" value="50" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Y:</label>
+                                        <input type="number" id="checkbox-y" value="700" />
+                                    </div>
+                                </div>
+                                <button class="btn btn-secondary" id="add-checkbox">
+                                    <i class="fas fa-plus"></i> Add Checkbox
+                                </button>
+                            </div>
+
+                            <div class="form-element-type">
+                                <h4><i class="fas fa-list"></i> Dropdown</h4>
+                                <div class="form-group">
+                                    <label>Field Name:</label>
+                                    <input type="text" id="dropdown-name" placeholder="e.g., country" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Options (one per line):</label>
+                                    <textarea id="dropdown-options" rows="4" placeholder="Option 1&#10;Option 2&#10;Option 3"></textarea>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>X:</label>
+                                        <input type="number" id="dropdown-x" value="50" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Y:</label>
+                                        <input type="number" id="dropdown-y" value="650" />
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Width:</label>
+                                        <input type="number" id="dropdown-width" value="150" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Height:</label>
+                                        <input type="number" id="dropdown-height" value="20" />
+                                    </div>
+                                </div>
+                                <button class="btn btn-secondary" id="add-dropdown">
+                                    <i class="fas fa-plus"></i> Add Dropdown
+                                </button>
+                            </div>
+
+                            <div class="form-element-type">
+                                <h4><i class="fas fa-dot-circle"></i> Radio Group</h4>
+                                <div class="form-group">
+                                    <label>Group Name:</label>
+                                    <input type="text" id="radio-group-name" placeholder="e.g., gender" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Options (one per line):</label>
+                                    <textarea id="radio-options" rows="3" placeholder="Male&#10;Female&#10;Other"></textarea>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>X:</label>
+                                        <input type="number" id="radio-x" value="50" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Y:</label>
+                                        <input type="number" id="radio-y" value="600" />
+                                    </div>
+                                </div>
+                                <button class="btn btn-secondary" id="add-radio-group">
+                                    <i class="fas fa-plus"></i> Add Radio Group
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="panel-section">
+                            <h3><i class="fas fa-magic"></i> Generate Form</h3>
+                            <button class="btn btn-primary" id="create-form-pdf">
+                                <i class="fas fa-file-pdf"></i> Create Form PDF
+                            </button>
+                            <button class="btn btn-secondary" id="clear-form">
+                                <i class="fas fa-trash"></i> Clear Form
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="preview-panel">
+                        <div class="preview-header">
+                            <h3><i class="fas fa-eye"></i> Form Preview</h3>
+                            <div class="preview-actions">
+                                <button class="btn btn-sm" id="download-form-pdf" disabled>
+                                    <i class="fas fa-download"></i> Download
+                                </button>
+                            </div>
+                        </div>
+                        <div class="preview-content">
+                            <div id="forms-preview-container">
+                                <div class="preview-placeholder">
+                                    <i class="fas fa-wpforms"></i>
+                                    <p>Your form preview will appear here</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tools Tab -->
+            <div class="tab-content" id="tools-tab">
+                <div class="content-grid">
+                    <div class="control-panel">
+                        <div class="panel-section">
+                            <h3><i class="fas fa-compress-arrows-alt"></i> Merge PDFs</h3>
+                            <div class="form-group">
+                                <label>Select PDF files:</label>
+                                <input type="file" id="merge-files" multiple accept=".pdf" />
+                            </div>
+                            <button class="btn btn-primary" id="merge-pdfs" disabled>
+                                <i class="fas fa-compress-arrows-alt"></i> Merge PDFs
+                            </button>
+                        </div>
+
+                        <div class="panel-section">
+                            <h3><i class="fas fa-cut"></i> Split PDF</h3>
+                            <div class="form-group">
+                                <label>Select PDF file:</label>
+                                <input type="file" id="split-file" accept=".pdf" />
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Start Page:</label>
+                                    <input type="number" id="split-start" value="1" min="1" />
+                                </div>
+                                <div class="form-group">
+                                    <label>End Page:</label>
+                                    <input type="number" id="split-end" value="1" min="1" />
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" id="split-pdf" disabled>
+                                <i class="fas fa-cut"></i> Split PDF
+                            </button>
+                        </div>
+
+                        <div class="panel-section">
+                            <h3><i class="fas fa-info-circle"></i> PDF Information</h3>
+                            <div class="form-group">
+                                <label>Select PDF file:</label>
+                                <input type="file" id="info-file" accept=".pdf" />
+                            </div>
+                            <button class="btn btn-primary" id="get-pdf-info" disabled>
+                                <i class="fas fa-info-circle"></i> Get PDF Info
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="preview-panel">
+                        <div class="preview-header">
+                            <h3><i class="fas fa-eye"></i> Tool Results</h3>
+                            <div class="preview-actions">
+                                <button class="btn btn-sm" id="download-tool-result" disabled>
+                                    <i class="fas fa-download"></i> Download
+                                </button>
+                            </div>
+                        </div>
+                        <div class="preview-content">
+                            <div id="tools-preview-container">
+                                <div class="preview-placeholder">
+                                    <i class="fas fa-tools"></i>
+                                    <p>Tool results will appear here</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div class="loading-overlay" id="loading">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Processing...</p>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- PDF.js and pdf-lib Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.min.js"></script>
+    <script>
+        // Configure PDF.js worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+{
+  "name": "pdf-editor-pro",
+  "version": "1.0.0",
+  "description": "A modern web application for creating, editing, and manipulating PDF documents using pdf-lib",
+  "main": "index.html",
+  "scripts": {
+    "start": "http-server -p 8000 -o",
+    "dev": "http-server -p 8000 -o --cors",
+    "build": "echo 'No build process needed - static files only'",
+    "serve": "python3 -m http.server 8000"
+  },
+  "keywords": [
+    "pdf",
+    "editor",
+    "pdf-lib",
+    "document",
+    "forms",
+    "javascript",
+    "web-app"
+  ],
+  "author": "PDF Editor Pro Team",
+  "license": "MIT",
+  "homepage": "https://github.com/your-username/pdf-editor-pro",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/pdf-editor-pro.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/pdf-editor-pro/issues"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "dependencies": {},
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
